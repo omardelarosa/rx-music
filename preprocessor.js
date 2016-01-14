@@ -85,12 +85,19 @@ function start (dataPath) {
           .map((f) => {
             return Q.Promise((resolve, reject, notify) => {
               var filepath = path.join(dataPath, f);
-              totalSize += fs.statSync(filepath).size;
-              resolve(fs.createReadStream(filepath).pause());
+	      console.log("the filepath is: "+filepath);
+	      console.log("the file extension detected was: "+path.extname(filepath));
+	      if(path.extname(filepath) !== ".gz"){
+		  console.log("non-gz detected");
+		  var theFile = fs.statSync(filepath);
+		  totalSize += theFile.size;
+		  resolve(fs.createReadStream(filepath).pause());
+	      }
             });
           })
       ).then((results) => {
         results.map((r) => {
+		console.log("pre-readability handle");
           r.on('readable', ()=> {
             var chunk
               , line = ""
@@ -101,11 +108,12 @@ function start (dataPath) {
                line += aByte; 
               } else {
                 // add line
+		console.log("about to parse event");
                 event = splitLine(line);
                 if (event) {
                   events.push(event);
-                  // console.log(event);
-                  clearShell();
+                  console.log(event);
+                  //clearShell();
                   console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
                 }
                 line = "";
@@ -114,7 +122,7 @@ function start (dataPath) {
 
           });
         });
-      })
+	  }).catch(printError)
     });
   });
 }
