@@ -22,11 +22,15 @@ function processChunk (chunk) {
 
 function splitLine (l) {
   const lineArr = l.split('\t');
+  // console.log(l);
   var timestampString = lineArr[0] || "";
   var eventString = lineArr[2] || "";
+  var time = timestampString.split(':').slice(1).join(':');
+  var event = eventString.split(':').slice(1);
+
   return {
-    timestamp: timestampString.split(':')[1],
-    event: eventString.split(':')[1]
+    timestamp: time,
+    event: event
   }
 }
 
