@@ -113,7 +113,8 @@ function start (dataPath) {
 		      //console.log(event);
 		      clearShell();
 		      console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
-		  }
+		      fs.writeFileSync('json/events.json', JSON.stringify(events), 'utf8'); 
+                  }
                 }
                 line = "";
               }
