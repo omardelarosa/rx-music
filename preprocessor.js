@@ -7,7 +7,7 @@ const moment          = require('moment');
 
 // Set this variable to the directory where your data lives
 const DEFAULT_EVENT_DATA_PATH = process.env.DEFAULT_EVENT_DATA_PATH || '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
-
+console.log(DEFAULT_EVENT_DATA_PATH);
 const VALID_EVENTS = [ 
   'jobview', 
   'pageview', 
@@ -79,16 +79,14 @@ function splitLine (l) {
 
 function start (dataPath) {
   return Q.Promise((resolve, reject, notify) => {
-    fs.readdir(dataPath, (err, files) => {
-      Q.all(
+     fs.readdir(dataPath, (err, files) => {
+       console.log(files);
+       Q.all(
         files.filter((f) => f !== '.DS_Store')
           .map((f) => {
             return Q.Promise((resolve, reject, notify) => {
               var filepath = path.join(dataPath, f);
-	      console.log("the filepath is: "+filepath);
-	      console.log("the file extension detected was: "+path.extname(filepath));
 	      if(path.extname(filepath) !== ".gz"){
-		  console.log("non-gz detected");
 		  var theFile = fs.statSync(filepath);
 		  totalSize += theFile.size;
 		  resolve(fs.createReadStream(filepath).pause());
@@ -97,10 +95,10 @@ function start (dataPath) {
           })
       ).then((results) => {
         results.map((r) => {
-	  console.log("pre-readability handle");
           r.on('readable', ()=> {
             var chunk
-              , line = ""
+	    , line = "";
+	    var counter = 1;
             while (null !== (chunk = r.read(1))) {
               currentByte += 1;
               var aByte = chunk.toString();
@@ -108,21 +106,23 @@ function start (dataPath) {
                line += aByte; 
               } else {
                 // add line
-		console.log("about to parse event");
                 event = splitLine(line);
                 if (event) {
-                  events.push(event);
-                  console.log(event);
-                  //clearShell();
-                  console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
+		  events.push(event);
+		  if(counter%1000 == 0){
+		      //console.log(event);
+		      clearShell();
+		      console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
+		  }
                 }
                 line = "";
               }
+	      counter+=1;
             }
 
           });
         });
-	  }).catch(printError)
+       }).catch(printError)
     });
   });
 }
