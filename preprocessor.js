@@ -6,6 +6,17 @@ const BufferStream    = require('q-io/buffer-stream');
 
 // Set this variable to the directory where your data lives
 const DEFAULT_EVENT_DATA_PATH = '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
+const VALID_EVENTS = [ 
+  'jobview', 
+  'pageview', 
+  'apply', 
+  'docupload', 
+  'register', 
+  'listview',
+  'resultsview',
+  'formview'
+];
+
 var lines = [];
 var events = [];
 var streams = [];
@@ -26,8 +37,10 @@ function splitLine (l) {
   var timestampString = lineArr[0] || "";
   var eventString = lineArr[2] || "";
   var time = timestampString.split(':').slice(1).join(':');
-  var event = eventString.split(':').slice(1);
-
+  var event = eventString.split(':').slice(1)[0];
+  if (!_.includes(VALID_EVENTS, event)) {
+   return null;
+  }
   return {
     timestamp: time,
     event: event
@@ -57,8 +70,10 @@ function start (dataPath) {
               } else {
                 // add line
                 event = splitLine(line);
-                events.push(event);
-                console.log(event);
+                if (event) {
+                  events.push(event);
+                  console.log(event);
+                }
                 line = "";
               }
             }
