@@ -97,7 +97,7 @@ function start (dataPath) {
           })
       ).then((results) => {
         results.map((r) => {
-		console.log("pre-readability handle");
+	  console.log("pre-readability handle");
           r.on('readable', ()=> {
             var chunk
               , line = ""
