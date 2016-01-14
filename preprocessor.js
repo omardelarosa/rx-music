@@ -3,18 +3,36 @@ const Q               = require('q');
 const _               = require('lodash');
 const path            = require('path');
 const BufferStream    = require('q-io/buffer-stream');
+const moment          = require('moment');
 
 // Set this variable to the directory where your data lives
 const DEFAULT_EVENT_DATA_PATH = '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
 const VALID_EVENTS = [ 
   'jobview', 
   'pageview', 
-  'apply', 
-  'docupload', 
-  'register', 
-  'listview',
+  'apply',
+  'bgcheck',
+  'register',
+  'subscribe',
+  'upgrade',
+  'renew',
+  'shortform',
+  'longform',
+  'resumeupload',
   'resultsview',
-  'formview'
+  'signup',
+  'docupload',
+  'quickregistration',
+  'fullregistration',
+  'skip',
+  'type',
+  'update',
+  'offsite',
+  'inclick',
+  'event2',
+  'expired',
+  'button click',
+  'cancel'
 ];
 
 var lines = [];
@@ -36,7 +54,7 @@ function splitLine (l) {
   // console.log(l);
   var timestampString = lineArr[0] || "";
   var eventString = lineArr[2] || "";
-  var time = timestampString.split(':').slice(1).join(':');
+  var time = Number(moment(timestampString.split(':').slice(1).join(':')).format('x'));
   var event = eventString.split(':').slice(1)[0];
   if (!_.includes(VALID_EVENTS, event)) {
    return null;
