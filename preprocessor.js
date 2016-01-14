@@ -39,6 +39,8 @@ var lines = [];
 var events = [];
 var streams = [];
 var currentBuffer;
+var totalSize = 0;
+var currentByte = 0;
 
 function printError (err) {
   console.error(err.message);
@@ -49,12 +51,21 @@ function processChunk (chunk) {
 
 }
 
+function clearShell() {
+    process.stdout.write('\u001B[2J\u001B[0;0f');
+}
+
 function splitLine (l) {
   const lineArr = l.split('\t');
   // console.log(l);
   var timestampString = lineArr[0] || "";
   var eventString = lineArr[2] || "";
-  var time = Number(moment(timestampString.split(':').slice(1).join(':')).format('x'));
+  var time;
+  try {
+    time = Number(new Date(timestampString.split(':').slice(1).join(':')));
+  } catch (e) {
+    return null;
+  }
   var event = eventString.split(':').slice(1)[0];
   if (!_.includes(VALID_EVENTS, event)) {
    return null;
@@ -72,7 +83,9 @@ function start (dataPath) {
         files.filter((f) => f !== '.DS_Store')
           .map((f) => {
             return Q.Promise((resolve, reject, notify) => {
-              resolve(fs.createReadStream(path.join(dataPath, f)).pause());
+              var filepath = path.join(dataPath, f);
+              totalSize += fs.statSync(filepath).size;
+              resolve(fs.createReadStream(filepath).pause());
             });
           })
       ).then((results) => {
@@ -80,8 +93,8 @@ function start (dataPath) {
           r.on('readable', ()=> {
             var chunk
               , line = ""
-
             while (null !== (chunk = r.read(1))) {
+              currentByte += 1;
               var aByte = chunk.toString();
               if (aByte !== '\n') {
                line += aByte; 
@@ -90,7 +103,9 @@ function start (dataPath) {
                 event = splitLine(line);
                 if (event) {
                   events.push(event);
-                  console.log(event);
+                  // console.log(event);
+                  clearShell();
+                  console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
                 }
                 line = "";
               }
@@ -99,7 +114,6 @@ function start (dataPath) {
           });
         });
       })
-      .catch(printError);
     });
   });
 }
