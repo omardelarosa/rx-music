@@ -6,8 +6,8 @@ const BufferStream    = require('q-io/buffer-stream');
 const moment          = require('moment');
 
 // Set this variable to the directory where your data lives
-//const DEFAULT_EVENT_DATA_PATH = '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
-const DEFAULT_EVENT_DATA_PATH = '/opt/alfheim/data/web-events/2015/01/12/';
+const DEFAULT_EVENT_DATA_PATH = process.env.DEFAULT_EVENT_DATA_PATH || '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
+
 const VALID_EVENTS = [ 
   'jobview', 
   'pageview', 
