@@ -14,13 +14,13 @@ $(() => {
 
   s = new Synth(440, 16, 120, 'square');
   s.playScale();
+  console.log(s.notes);
+  // s2 = new Synth(440, 16, 90, 'triangle');
+  // s2.playScale();
 
-  s2 = new Synth(440, 16, 90, 'triangle');
-  s2.playScale();
+  // s3 = new Synth(440, 16, 60, 'triangle');
+  // s3.playScale();
 
-  s3 = new Synth(440, 16, 60, 'triangle');
-  s3.playScale();
-
-  s4 = new Synth(440, 16, 30, 'triangle');
-  s4.playScale();
+  // s4 = new Synth(440, 16, 30, 'triangle');
+  // s4.playScale();
 });

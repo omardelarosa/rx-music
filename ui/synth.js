@@ -7,36 +7,40 @@ function __buildScale (maxNotes, root) {
   var notes = [];
 
   _.times(maxNotes, (n) => {
-    var octave = Math.floor((n+1)/8)
+    var octave = Math.floor(n/7)
       , frequencyAdjust;
-    switch ((n+1) % 8) {
-      case 1:
+    switch (n % 7) {
+      case 0:
         frequencyAdjust = 1;
         break;
-      case 2:
+      case 1:
         frequencyAdjust = 9/8;
         break;
-      case 3:
+      case 2:
         frequencyAdjust = 5/4;
         break;
-      case 4:
+      case 3:
         frequencyAdjust = 4/3;
         break;
-      case 5:
+      case 4:
         frequencyAdjust = 3/2;
         break;
-      case 6:
+      case 5:
         frequencyAdjust = 5/3;
         break;
-      case 7:
+      case 6:
         frequencyAdjust = 15/8;
         break;
-      default:
-        frequencyAdjust = 1;
-        break;
     }
-
-    notes.push(Number.parseInt(root*(frequencyAdjust+octave)));
+    console.log("n", n);
+    console.log("root", root);
+    console.log("frequencyAdjust", frequencyAdjust);
+    console.log("octave", octave, "raw", (n+1)/8);
+    notes.push(
+      Number.parseInt(
+        root*(frequencyAdjust*(Math.pow(2,octave)))
+      )
+    );
   });
 
   return notes;
