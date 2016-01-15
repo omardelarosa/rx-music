@@ -8,6 +8,7 @@ module.exports.start = (done) => {
 
   // middleware
   var app = express();
+  var httpServer = require('http').Server(app);
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,7 +22,7 @@ module.exports.start = (done) => {
   // bind routes
   routes(app);
 
-  var port = Number(process.env.PORT || 5001);
+  var port = Number(process.env.PORT);
 
   var server = app.listen(port, () => {
     console.log('Listening on port ' + port);
@@ -38,6 +39,18 @@ module.exports.start = (done) => {
     if (done) {
       return done(e);
     }
+  });
+ 
+  // bind sockets
+  var io = require('socket.io')(5005);
+
+  io.on('connection', function (socket) {
+    setInterval(() => {
+      socket.emit('news', { note: 440 });
+    }, 1000);
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
   });
 
 };
