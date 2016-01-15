@@ -20,8 +20,9 @@ Sequencer.prototype.start = function (bpm, random) {
     // update table
     var rows = [];
     currentFrame.forEach((n, idx) => {
+      var text = (n && n.eventName ? n.eventName : ".");
       var $row = $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`)
-        .text(n || ".")
+        .text(text)
         .addClass('on')
         .addClass('played');
 
@@ -31,7 +32,11 @@ Sequencer.prototype.start = function (bpm, random) {
       rows.push($row);
     });
     notes.forEach((n) => {
-      this.synth.scheduleNote(this.synth.notes[n], 0);   
+      var note = this.synth.notes[n.note % 16];
+      if (!note) {
+        note = 1;
+      }
+      this.synth.scheduleNote(note, 0);   
     });
     setTimeout(()=> {
       rows.forEach((r, idx) => { 
@@ -72,7 +77,7 @@ Sequencer.prototype.randomize = function () {
   this.synth.notes.forEach((n, idx) => {
     _.times(_.random(0,1), (n)=> {
       var noteIdx = _.random(0,this.synth.notes.length-1); 
-      this.matrix[idx][noteIdx] = noteIdx;
+      this.matrix[idx][noteIdx] = { eventName: 'blah', note: noteIdx };
       // make triad possible
       _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = noteIdx+2);
       _.random(0,1) && this.matrix[idx][noteIdx+4] === null && (this.matrix[idx][noteIdx+4] = noteIdx+4);
@@ -84,10 +89,10 @@ Sequencer.prototype.getNotesBatch = function (batchSize) {
   _.times(batchSize, (idx) => {
     var note = window.notesQueue.shift();
     var noteIdx = note.notes[0];
-    this.matrix[idx][noteIdx] = noteIdx;
+    this.matrix[idx][noteIdx] = { eventName: note.eventName, note: noteIdx };
       // make triad possible
-      _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = noteIdx+2);
-      _.random(0,1) && this.matrix[idx][noteIdx+4] === null && (this.matrix[idx][noteIdx+4] = noteIdx+4);
+      _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = { eventName: '#', note: noteIdx+2 });
+      _.random(0,1) && this.matrix[idx][noteIdx+4] === null && (this.matrix[idx][noteIdx+4] = { eventName: '#', note: noteIdx+4 });
   });
 };
 
