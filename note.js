@@ -34,10 +34,18 @@ var writeStream = fs.createWriteStream('./music.json');
 writeStream.write("[");
 writeStream.end();
 
+var granularity = 200;
 var event = null;
 var beat = null;
-for(var i=0;i<events.size();i = i+1){
+var currentBatch = [];
+for(var i=0;i<events.length;i = i+1){
+
     event = events[i];
+    currentBatch.push(event);
+    if(currentBatch.length % granularity == 0){
+    	
+    	currentBatch = [];
+    } 
     beat = {
 		eventName: event.event,
 		notes: [noteMapping[eventTypeMapping[event.event]]]  //basic pitch map.
