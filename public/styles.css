@@ -12,7 +12,6 @@ body {
 }
 
 .row {
-  width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -24,7 +23,15 @@ body {
   display: none;
 }
 
+.played {
+  display: inline-block;
+  background-color: transparent;
+}
+
 .on {
   background-color: green;
-  display: inline-block;
+}
+
+.note {
+  background-color: blue;
 }

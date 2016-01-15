@@ -17,16 +17,30 @@ Sequencer.prototype.start = function (bpm) {
     var currentFrame = this.matrix[cursor];
     var notes = currentFrame.filter((n) => { return n });
     // update table
+    var rows = [];
     currentFrame.forEach((n, idx) => {
-      if (n) { 
-        $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`)
-          .text(n)
-          .addClass('on');
+      var $row = $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`)
+        .text(n || ".")
+        .addClass('on')
+        .addClass('played');
+
+      if (n) {
+        $row.addClass('note');
       }
+      rows.push($row);
     });
     notes.forEach((n) => {
       this.synth.scheduleNote(n, 0);   
     });
+    setTimeout(()=> {
+      rows.forEach((r, idx) => { 
+        var $r = $(r); 
+        $r.removeClass('on'); 
+        $r.removeClass('note'); 
+      });
+      rows = [];
+    }, beatLength);
+
     if (cursor >= this.beats-1) {
       cursor = 0;
       this.reset();
@@ -42,7 +56,7 @@ Sequencer.prototype.reset = function () {
   _.times(this.beats, (b) => {
     var beats = [];
     _.times(this.notes, (n) => {
-      $(`#main-container .row:eq(${b}) .col:eq(${n})`).text('').removeClass('on'); 
+      $(`#main-container .row:eq(${b}) .col:eq(${n})`).text('').removeClass('played'); 
       beats.push(null);
     });
     this.matrix.push(beats);
