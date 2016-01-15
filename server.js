@@ -1,9 +1,10 @@
 var express = require('express')
   , logfmt = require('logfmt')
   , bodyParser = require('body-parser')
-  , path = require('path');
+  , path = require('path')
+  , routes = require('./routes');
 
-module.exports.start = function(done){
+module.exports.start = (done) => {
 
   // middleware
   var app = express();
@@ -18,10 +19,11 @@ module.exports.start = function(done){
   app.use(logfmt.requestLogger());
 
   // bind routes
+  routes(app);
 
   var port = Number(process.env.PORT || 5001);
 
-  var server = app.listen(port, function(){
+  var server = app.listen(port, () => {
     console.log('Listening on port ' + port);
     
     if (done) {
@@ -29,7 +31,7 @@ module.exports.start = function(done){
     }
   });
 
-  server.on('error', function(e){
+  server.on('error', (e) => {
     if (e.code == 'EADDRINUSE') {
       console.log('Address in use.  Is the server already running?');
     }
