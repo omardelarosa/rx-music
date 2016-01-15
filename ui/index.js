@@ -14,7 +14,11 @@ $(() => {
     // currentBeat+=1;
   });
 
-  s = new Synth(440, 16, 120, 'square');
-  s.playScale();
+  synth = new Synth(440, 16, 120, 'square');
+  // s.playScale();
 
+  seq = new Sequencer(16,16,synth);
+  window.seq = seq;
+  seq.randomize();
+  seq.start(120);
 });
