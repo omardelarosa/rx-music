@@ -2,7 +2,8 @@ var express = require('express')
   , logfmt = require('logfmt')
   , bodyParser = require('body-parser')
   , path = require('path')
-  , routes = require('./routes');
+  , routes = require('./routes')
+  , _ = require('lodash');
 
 module.exports.start = (done) => {
 
@@ -46,7 +47,7 @@ module.exports.start = (done) => {
 
   io.on('connection', function (socket) {
     setInterval(() => {
-      socket.emit('news', { note: 440 });
+      socket.emit('news', { note: _.random(220,880) });
     }, 1000);
     socket.on('my other event', function (data) {
       console.log(data);
