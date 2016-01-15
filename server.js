@@ -3,7 +3,8 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , path = require('path')
   , routes = require('./routes')
-  , _ = require('lodash');
+  , _ = require('lodash')
+  , notes = require('./music');
 
 module.exports.start = (done) => {
 
@@ -47,10 +48,7 @@ module.exports.start = (done) => {
 
   io.on('connection', function (socket) {
     setInterval(() => {
-      socket.emit('note', { 
-        eventName: 'blah',
-        note: _.random(0,15) 
-      });
+      socket.emit('note', notes.shift());
     }, 200);
     socket.on('my other event', function (data) {
       console.log(data);

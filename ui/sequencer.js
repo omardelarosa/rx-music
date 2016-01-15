@@ -83,7 +83,7 @@ Sequencer.prototype.randomize = function () {
 Sequencer.prototype.getNotesBatch = function (batchSize) {
   _.times(batchSize, (idx) => {
     var note = window.notesQueue.shift();
-    var noteIdx = note.note;
+    var noteIdx = note.notes[0];
     this.matrix[idx][noteIdx] = noteIdx;
       // make triad possible
       _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = noteIdx+2);

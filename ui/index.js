@@ -4,7 +4,7 @@ var Synth = require('./synth');
 var Sequencer = require('./sequencer');
 var currentBeat = 0;
 var DEFAULT_NUMBER_OF_BEATS = 16;
-var DEFAULT_NOTE_RANGE = 16;
+var DEFAULT_NOTE_RANGE = 25;
 var DEFAULT_BPM = 120;
 var DEFAULT_ROOT_NOTE = 440;
 var DEFAULT_WAVEFORM = 'square';
@@ -52,7 +52,7 @@ $(() => {
   
   var socket = io.connect('http://localhost:5005');
   socket.on('note', function (data) {
-    // console.log("event", data);
+    console.log("event", data);
     window.notesQueue.push( data );
   });
 
