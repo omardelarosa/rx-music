@@ -30,7 +30,7 @@ Sequencer.prototype.start = function (bpm) {
       rows.push($row);
     });
     notes.forEach((n) => {
-      this.synth.scheduleNote(n, 0);   
+      this.synth.scheduleNote(this.synth.notes[n], 0);   
     });
     setTimeout(()=> {
       rows.forEach((r, idx) => { 
@@ -65,8 +65,12 @@ Sequencer.prototype.reset = function () {
 
 Sequencer.prototype.randomize = function () {
   this.synth.notes.forEach((n, idx) => {
-    _.times(_.random(0,3), (n)=> {
-      this.matrix[idx][n] = _.sample(this.synth.notes);
+    _.times(_.random(0,1), (n)=> {
+      var noteIdx = _.random(0,this.synth.notes.length-1); 
+      this.matrix[idx][noteIdx] = noteIdx;
+      // make triad possible
+      _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = noteIdx+2);
+      _.random(0,1) && this.matrix[idx][noteIdx+4] === null && (this.matrix[idx][noteIdx+4] = noteIdx+4);
     });
   });
 }
