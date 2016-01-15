@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
     "lodash": "^4.0.0",
+    "logfmt": "^1.2.0",
     "moment": "^2.11.1",
     "q": "^1.4.1",
     "q-io": "^1.13.2"
