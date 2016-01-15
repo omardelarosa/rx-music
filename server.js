@@ -47,8 +47,11 @@ module.exports.start = (done) => {
 
   io.on('connection', function (socket) {
     setInterval(() => {
-      socket.emit('news', { noteIndex: _.random(0,15) });
-    }, 1000);
+      socket.emit('note', { 
+        eventName: 'blah',
+        note: _.random(0,15) 
+      });
+    }, 200);
     socket.on('my other event', function (data) {
       console.log(data);
     });

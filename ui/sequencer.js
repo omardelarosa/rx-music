@@ -10,7 +10,8 @@ function Sequencer (beats, notes, synth) {
   this.reset();
 }
 
-Sequencer.prototype.start = function (bpm) {
+Sequencer.prototype.start = function (bpm, random) {
+  var isRandom = random;
   var beatLength = 60 * 1000 * (1/bpm);
   var cursor = 0;
   this.interval = setInterval(()=>{
@@ -44,7 +45,11 @@ Sequencer.prototype.start = function (bpm) {
     if (cursor >= this.beats-1) {
       cursor = 0;
       this.reset();
-      this.randomize();
+      if (isRandom) {
+        this.randomize();
+      } else {
+        this.getNotesBatch(this.beats);
+      }
     } else {
       cursor += 1;
     }
@@ -74,6 +79,17 @@ Sequencer.prototype.randomize = function () {
     });
   });
 }
+
+Sequencer.prototype.getNotesBatch = function (batchSize) {
+  _.times(batchSize, (idx) => {
+    var note = window.notesQueue.shift();
+    var noteIdx = note.note;
+    this.matrix[idx][noteIdx] = noteIdx;
+      // make triad possible
+      _.random(0,1) && this.matrix[idx][noteIdx+2] === null && (this.matrix[idx][noteIdx+2] = noteIdx+2);
+      _.random(0,1) && this.matrix[idx][noteIdx+4] === null && (this.matrix[idx][noteIdx+4] = noteIdx+4);
+  });
+};
 
 Sequencer.prototype.stop = function () {
   clearInterval(this.interval);
