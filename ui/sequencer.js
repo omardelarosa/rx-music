@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var $ = require('jquery');
 
 function Sequencer (beats, notes, synth) {
   this.synth = synth;
@@ -15,6 +16,11 @@ Sequencer.prototype.start = function (bpm) {
   setInterval(()=>{
     var currentFrame = this.matrix[cursor];
     var notes = currentFrame.filter((n) => { return n });
+    // update table
+    console.log(currentFrame);
+    currentFrame.forEach((n, idx) => {
+      if (n) { $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`).text(n); }
+    });
     console.log(currentFrame);
     notes.forEach((n) => {
       this.synth.scheduleNote(n, 0);   
@@ -22,6 +28,7 @@ Sequencer.prototype.start = function (bpm) {
     if (cursor >= this.beats-1) {
       cursor = 0;
       this.reset();
+      this.randomize();
     } else {
       cursor += 1;
     }
@@ -33,6 +40,7 @@ Sequencer.prototype.reset = function () {
   _.times(this.beats, (b) => {
     var beats = [];
     _.times(this.notes, (n) => {
+      $(`#main-container .row:eq(${b}) .col:eq(${n})`).text(''); 
       beats.push(null);
     });
     this.matrix.push(beats);
