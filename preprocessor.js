@@ -8,6 +8,9 @@ const moment          = require('moment');
 // Set this variable to the directory where your data lives
 const DEFAULT_EVENT_DATA_PATH = process.env.DEFAULT_EVENT_DATA_PATH || '/Users/omardelarosa/Code/downloads/event_data_days/01_12_2016/';
 console.log(DEFAULT_EVENT_DATA_PATH);
+var writeStream = fs.createWriteStream('./output2.json');
+writeStream.write("{\"events\":[");
+writeStream.end();
 const VALID_EVENTS = [ 
   'jobview', 
   'pageview', 
@@ -95,10 +98,10 @@ function start (dataPath) {
           })
       ).then((results) => {
         results.map((r) => {
-          r.on('readable', ()=> {
+        r.on('readable', ()=> {
             var chunk
-	    , line = "";
-	    var counter = 1;
+	    	, line = "";
+	    	var counter = 1;
             while (null !== (chunk = r.read(1))) {
               currentByte += 1;
               var aByte = chunk.toString();
@@ -108,19 +111,33 @@ function start (dataPath) {
                 // add line
                 event = splitLine(line);
                 if (event) {
-		  events.push(event);
-		  if(counter%1000 == 0){
-		      //console.log(event);
-		      clearShell();
-		      console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
-		  }
+		  			//events.push(event);
+		  			try{
+		  				//writeStream.write(JSON.stringify(event)+",");
+		  				fs.appendFile('output2.json', JSON.stringify(event)+",", (err) => {
+  							if (err) throw err;
+						});
+		  			}catch(e){
+		  				console.log(e);
+		  			}
+		  			if(counter%10000 == 0){
+		  			    //console.log(event);
+		  			    clearShell();
+		  			    console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
+		  			}
                 }
                 line = "";
               }
-	      counter+=1;
+	      	  counter+=1;
             }
+            if(currentByte >= totalSize){
+            	fs.appendFile('output2.json', "]}", (err) => {
+  					if (err) throw err;
+				});
+          	}
 
           });
+          
         });
        }).catch(printError)
     });
