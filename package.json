@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --harmony preprocessor.js"
+    "start": "node --harmony preprocessor.js",
+    "dev": "./node_modules/.bin/foreman start",
+    "build": "./node_modules/.bin/webpack ./ui/index.js ./public/bundle.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
+    "foreman": "^1.4.1",
     "lodash": "^4.0.0",
     "logfmt": "^1.2.0",
     "moment": "^2.11.1",
     "q": "^1.4.1",
-    "q-io": "^1.13.2"
+    "q-io": "^1.13.2",
+    "webpack": "^1.12.11"
   }
 }
