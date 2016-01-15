@@ -1,7 +1,9 @@
 var $ = require('jquery');
 var Synth = require('./synth');
+var Sequencer = require('./sequencer');
 var currentBeat = 0;
 var s;
+var seq;
 
 $(() => {
   console.log("started");
@@ -14,13 +16,5 @@ $(() => {
 
   s = new Synth(440, 16, 120, 'square');
   s.playScale();
-  
-  s2 = new Synth(440, 16, 60, 'triangle');
-  s2.playScale();
 
-  s3 = new Synth(440, 16, 30, 'sine');
-  s3.playScale();
-
-  s4 = new Synth(440, 16, 240, 'sine');
-  s4.playScale();
 });
