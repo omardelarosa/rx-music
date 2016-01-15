@@ -7,3 +7,5 @@ data/
 *~
 *.json
 *.xz
+json/
+public/bundle.*

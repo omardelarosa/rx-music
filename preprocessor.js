@@ -111,20 +111,20 @@ function start (dataPath) {
                 // add line
                 event = splitLine(line);
                 if (event) {
-		  			//events.push(event);
-		  			try{
-		  				//writeStream.write(JSON.stringify(event)+",");
-		  				fs.appendFile('output2.json', JSON.stringify(event)+",", (err) => {
-  							if (err) throw err;
-						});
-		  			}catch(e){
-		  				console.log(e);
-		  			}
-		  			if(counter%10000 == 0){
-		  			    //console.log(event);
-		  			    clearShell();
-		  			    console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
-		  			}
+                    //events.push(event);
+                    try{
+                            //writeStream.write(JSON.stringify(event)+",");
+                            fs.appendFile('output2.json', JSON.stringify(event)+",", (err) => {
+                                    if (err) throw err;
+                            });
+                    }catch(e){
+                            console.log(e);
+                    }
+                    if(counter%10000 == 0){
+                        //console.log(event);
+                        clearShell();
+                        console.log('progress: ', ((currentByte/totalSize)*100).toFixed(6));
+                    }
                 }
                 line = "";
               }
