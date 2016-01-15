@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#main-container {
+  width: 100%;
+  height: 100%;
+  background-color: #1C8C83;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+.main-title {
+  width: 100%;
+  height: 100%;
+  font-family: 'Lobster', cursive; 
+  padding-top: 20%;
+  text-align: center;
+  font-size: 10.0em;
+}
+
+.row {
+  padding: 0;
+  margin: 0;
+}
+
+.col {
+  background-color: transparent;
+  border: 0px;
+  margin: 0px;
+  font-family: 'Helvetica';
+  font-size: 0.8em;
+  display: none;
+}
+
+.played {
+  display: inline-block;
+  background-color: transparent;
+}
+
+.on {
+  background-color: #35C0B4;
+}
+
+.note {
+  background-color: #00373F;
+}
