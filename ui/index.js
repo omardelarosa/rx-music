@@ -6,7 +6,7 @@ var currentBeat = 0;
 var DEFAULT_NUMBER_OF_BEATS = 16;
 var DEFAULT_NOTE_RANGE = 16;
 var DEFAULT_BPM = 120;
-var DEFAULT_ROOT_NOTE = 440;
+var DEFAULT_ROOT_NOTE = 220;
 var DEFAULT_WAVEFORM = 'square';
 var s;
 var seq;
