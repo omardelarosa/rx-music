@@ -13,12 +13,26 @@ var seq;
 
 function buildTable () {
   var $container = $('#main-container');
+  var height = $container.height();
+  var width = $container.width();
+  var paddingAmount = 5;
+  var elWidth = Number.parseInt(width/DEFAULT_NUMBER_OF_BEATS-(paddingAmount*2))+'px';
+  var elHeight = Number.parseInt((height/DEFAULT_NOTE_RANGE)-(paddingAmount*2))+'px';
+
+  console.log(height, width, elWidth, elHeight);
   _.times(DEFAULT_NUMBER_OF_BEATS, (b) => {
     var $row = $('<div>')
     $row.addClass('row');
+    $row.css({ height: elHeight });
+
     _.times(DEFAULT_NOTE_RANGE, (n) => {
-      var $col = $('<span>');
+      var $col = $('<div>');
       $col.addClass('col');
+      $col.css({
+          padding: paddingAmount+'px',
+          width: elWidth,
+          height: elHeight
+        });
       $row.append($col);
     });
     $container.append($row);

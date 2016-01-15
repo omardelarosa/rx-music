@@ -13,15 +13,17 @@ function Sequencer (beats, notes, synth) {
 Sequencer.prototype.start = function (bpm) {
   var beatLength = 60 * 1000 * (1/bpm);
   var cursor = 0;
-  setInterval(()=>{
+  this.interval = setInterval(()=>{
     var currentFrame = this.matrix[cursor];
     var notes = currentFrame.filter((n) => { return n });
     // update table
-    console.log(currentFrame);
     currentFrame.forEach((n, idx) => {
-      if (n) { $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`).text(n); }
+      if (n) { 
+        $(`#main-container .row:eq(${idx}) .col:eq(${cursor})`)
+          .text(n)
+          .addClass('on');
+      }
     });
-    console.log(currentFrame);
     notes.forEach((n) => {
       this.synth.scheduleNote(n, 0);   
     });
@@ -40,7 +42,7 @@ Sequencer.prototype.reset = function () {
   _.times(this.beats, (b) => {
     var beats = [];
     _.times(this.notes, (n) => {
-      $(`#main-container .row:eq(${b}) .col:eq(${n})`).text(''); 
+      $(`#main-container .row:eq(${b}) .col:eq(${n})`).text('').removeClass('on'); 
       beats.push(null);
     });
     this.matrix.push(beats);
@@ -53,6 +55,10 @@ Sequencer.prototype.randomize = function () {
       this.matrix[idx][n] = _.sample(this.synth.notes);
     });
   });
+}
+
+Sequencer.prototype.stop = function () {
+  clearInterval(this.interval);
 }
 
 module.exports = Sequencer;
