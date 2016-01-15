@@ -32,10 +32,6 @@ function __buildScale (maxNotes, root) {
         frequencyAdjust = 15/8;
         break;
     }
-    console.log("n", n);
-    console.log("root", root);
-    console.log("frequencyAdjust", frequencyAdjust);
-    console.log("octave", octave, "raw", (n+1)/8);
     notes.push(
       Number.parseInt(
         root*(frequencyAdjust*(Math.pow(2,octave)))
